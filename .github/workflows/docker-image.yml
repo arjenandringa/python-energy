@@ -11,13 +11,12 @@ on:
       - 'feature*'
 
 jobs:
-  build:
+  Build-Docker-Container:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-    - name: Build docker container
-      run: docker build . --file Dockerfile --tag python-energy:$(date +%s)
+    - run: docker build . --file Dockerfile --tag python-energy:$(date +%s)
     - name: Check Postgres image output
       run: |
         psql -h localhost -U docker -d energy -c '\dt'
