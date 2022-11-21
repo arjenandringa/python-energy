@@ -14,8 +14,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Check Docker syntax
+    - name: Checkout repository
       uses: actions/checkout@v3
+    - name: Build docker container
       run: docker build . --file Dockerfile --tag python-energy:$(date +%s)
     - name: Check Postgres image output
       run: |
