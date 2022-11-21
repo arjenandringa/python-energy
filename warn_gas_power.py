@@ -48,16 +48,14 @@ def process_power():
     return energy_consumed
 
 def publish():
-    header = {"Content-Type": "application/json"}
-    http_data = {"content": f"{process_power()} KWh verbruikt in 15 minuten :peeposad:"}
-    requests.post(settings.warn_power, json=http_data, headers=header)
-    os.chdir(settings.workdir)
-    with open('gas_consumed','r',encoding='utf-8') as f:
+    http_data = {"content": f"{process_power()} KWh verbruikt in 15 minuten"}
+    energy.post(settings.warn_power, json=http_data)
+    with open(f'{settings.workdir}/gas_consumed','r',encoding='utf-8') as f:
         gc = f.read()
     # Convert process_gas() value to string, because gc is also of class string
     if gc != str(process_gas()):
         http_data = {"content": f"{process_gas()} m3 verbruikt in 15 minuten"}
-        requests.post(settings.warn_gas, json=http_data, headers=header)
+        energy.post(settings.warn_gas, json=http_data)
 
 if __name__ == "__main__":
     publish()

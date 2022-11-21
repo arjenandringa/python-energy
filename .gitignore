@@ -6,6 +6,7 @@
 # Customs
 *.service
 *.timer
+settings.py
 
 # User-specific files
 *.rsuser
