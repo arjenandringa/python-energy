@@ -29,6 +29,7 @@ def write_partition_name():
         f.write(energy.partition_name())
 
 # Drop the partitioned table with value partition_name from the Previous Day. Retrying mechanism implemented because this tends to fail every few days.
+# Bug for which retrying is implemented has been fixed, but retrying will still be kept around for now.
 @retry(wait_random_min=1000, wait_random_max=2000,stop_max_attempt_number=5)
 def drop_table():
     with open(f'{settings.workdir}/partition_name','r',encoding='utf-8') as f:
