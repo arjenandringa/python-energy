@@ -2,7 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
+      - 'feature*'
   pull_request:
     branches: [ "main" ]
 
@@ -10,6 +12,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
     - name: Check Docker syntax
+    - uses: actions/checkout@v3
       run: docker build . --file Dockerfile --tag python-energy:$(date +%s)
+    
+    - name: Check Postgres image output
+      run: |
+        psql -h localhost -U docker -d energy -c '\dt'
