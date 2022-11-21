@@ -14,11 +14,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Check Docker syntax
     - uses: actions/checkout@v3
+    - name: Check Docker syntax
       run: docker build . --file Dockerfile --tag python-energy:$(date +%s)
     
-    - name: Check Postgres image output
     - uses: actions/checkout@v3
+    - name: Check Postgres image output
       run: |
         psql -h localhost -U docker -d energy -c '\dt'
