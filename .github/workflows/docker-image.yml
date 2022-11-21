@@ -14,8 +14,7 @@ jobs:
   Build-Docker-Container:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+    - uses: actions/checkout@v3
     - name: Build container
       run: |
         docker build . --file Dockerfile --tag python-energy:$(date +%s)
