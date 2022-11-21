@@ -19,5 +19,6 @@ jobs:
       run: docker build . --file Dockerfile --tag python-energy:$(date +%s)
     
     - name: Check Postgres image output
+    - uses: actions/checkout@v3
       run: |
         psql -h localhost -U docker -d energy -c '\dt'
