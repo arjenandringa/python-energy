@@ -34,11 +34,13 @@ def fix_data_keys():
 # Write the partition name for partition_table.py
 def partition_name():
     partition_name = 'energydb_' + datetime.now().strftime('%Y%m%d')
-    # Write partition name to file for use in drop_table()
-    with open(f'{settings.workdir}/partition_name','w+',encoding='utf-8') as f:
-        f.write(partition_name)
     return partition_name
-    
+
+def post(webhook, json):
+    # Default header
+    header = {"Content-Type": "application/json"}
+    requests.post(webhook, json, header)
+
 # Set up database connection
 def db_conn():
     try:
