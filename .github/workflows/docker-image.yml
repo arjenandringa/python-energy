@@ -14,7 +14,8 @@ jobs:
   Build-Docker-Container:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - name: Check the code out
+      uses: actions/checkout@v3
 
     - name: Build container
       run: |
