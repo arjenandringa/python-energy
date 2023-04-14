@@ -21,7 +21,7 @@ jobs:
       run: 'docker build . --file Dockerfile --tag python-energy:$(date +%Y%m%d)'
 
     - name: Start container
-      run: 'docker run -d python-energy:$(date +%Y%m%d) && sleep 10'
+      run: 'docker run -d python-energy:$(date +%Y%m%d) --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5'
 
     - name: Check Postgres image output
       run: PGPASSWORD=docker psql -h localhost -U docker -d energy -c '\dt'
