@@ -1,6 +1,4 @@
-import requests
 import energy
-import os
 import settings
 
 # Collect last 15 minutes worth of gas usage
