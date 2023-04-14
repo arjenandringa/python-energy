@@ -25,4 +25,4 @@ jobs:
       run: 'docker run -d python-energy:$(date +%Y%m%d) && sleep 20'
 
     - name: Check Postgres image output
-      run: PGPASSWORD=docker psql -h localhost -U docker -d energy -c '\dt'
+      run: PGPASSWORD=docker psql -h postgres -U docker -d energy -c '\dt'
