@@ -4,21 +4,24 @@ on:
   push:
     branches:
       - main
-      - 'feature*'
+      - feature*
   pull_request:
     branches:
       - main
-      - 'feature*'
+      - feature*
 
 jobs:
-  Build-Docker-Container:
+  Build-Run-Docker-Container:
     runs-on: ubuntu-latest
     steps:
     - name: Check the code out
       uses: actions/checkout@v3
 
     - name: Build container
-      run: 'docker build . --file Dockerfile --tag python-energy:$(date +%s)'
+      run: 'docker build . --file Dockerfile --tag python-energy:$(date +%Y%m%d)'
+
+    - name: Start container
+      run: 'docker run -d python:energy:$(date +%Y%m%d) && sleep 10'
 
     - name: Check Postgres image output
-      run: psql -h localhost -U docker -d energy -c '\dt'
+      run: PGPASSWORD=docker psql -h localhost -U docker -d energy -c '\dt'
