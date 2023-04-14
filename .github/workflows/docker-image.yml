@@ -22,7 +22,7 @@ jobs:
       run: 'docker build . --file Dockerfile --tag python-energy:$(date +%Y%m%d)'
 
     - name: Start container
-      run: 'docker run -d python-energy:$(date +%Y%m%d) && sleep 20'
+      run: 'docker run -d -p 5434:5432 python-energy:$(date +%Y%m%d) && sleep 20'
 
     - name: Check Postgres image output
-      run: PGPASSWORD=docker psql -h postgres -U docker -d energy -c '\dt'
+      run: PGPASSWORD=docker psql -h localhost -p 5434 -U docker -d energy -c '\dt'
