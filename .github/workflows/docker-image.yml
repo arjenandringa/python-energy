@@ -9,9 +9,9 @@ on:
     branches:
       - main
       - feature*
+  workflow_dispatch:
 
 jobs:
-  
   Build-Run-Docker-Container:
     runs-on: ubuntu-latest
     steps:
