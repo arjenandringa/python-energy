@@ -3,6 +3,7 @@ from datetime import datetime
 import psycopg2
 import logging
 import settings
+from partition_table import partition_name
 
 # Script lives as systemd unit with timer unit
 # /etc/systemd/system/energy.service and ./energy.timer
@@ -30,11 +31,6 @@ def fix_data_keys():
         # Pop drops a key, the assignment allows the replacement of said dropped key
         data[var] = data.pop(f'sensor-{var}')
     return data
-
-# Write the partition name for partition_table.py
-def partition_name():
-    partition_name = 'energydb_' + datetime.now().strftime('%Y%m%d')
-    return partition_name
 
 def post(webhook, json):
     # Default header
@@ -82,11 +78,5 @@ if __name__ == "__main__":
     process_energy_vars()
 
 # TODO
-# ~~ Write to logfile upon success and failure ~~ logger()
 # Capture meaningful log messages
-# ~~ Write main ~~ Si cabron.
-# ~~ Script to evaluate data and post messages ~~ warn_gas_power.py
-# ~~Postgres db storage: daily partitioning ~~: partition_table.py
-# ~~ Postgres db logging ~~ No need. Drops daily anyway.
-# ~~ Logrotate all logfiles to save storage ~~ Not necessary lul
 # Encrypted password
