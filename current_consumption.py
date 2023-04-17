@@ -1,6 +1,4 @@
-import requests
-import energy
-import settings
+import stdlib
 
 # Python script to check and warn if current consumption is above 1KWh
 
@@ -20,9 +18,8 @@ def warn():
     data = collect_power_consumed()
     data = float(list(data)[-1])
     if data > 0.500:
-        headers = {"Content-Type": "application/json"}
         http_data = {"content": f"Geregistreerd verbruik: {data} KWh"}
-        requests.post(settings.power_consumed, json=http_data, headers=headers)
+        stdlib.post(settings.warn_gas, json=http_data)
 
 if __name__ == "__main__":
     warn()

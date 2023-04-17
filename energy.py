@@ -1,26 +1,14 @@
-import requests
-from datetime import datetime
-import psycopg2
-import logging
-import settings
+import stdlib
 from partition_table import partition_name
 
 # Script lives as systemd unit with timer unit
 # /etc/systemd/system/energy.service and ./energy.timer
 
-def logger():
-    logfile = settings.logfile
-    logformat = "%(levelname)s %(asctime)s - %(message)s"
-    logging.basicConfig(filename = logfile,
-                        format = logformat,
-                        level=logging.INFO)
-    return logging.getLogger()
-
 # Gather data from each endpoint and make a dict (key,value)
 def energy_vars():
     data = {}
     for var in settings.endpoints:
-        information = requests.get(f'http://{settings.reader}/sensor/{var}')
+        information = requests.get(f"http://{settings.reader}/sensor/{var}")
         data[information.json()['id']] = information.json()['value']
     return data
 
@@ -29,23 +17,8 @@ def fix_data_keys():
     data = energy_vars()
     for var in settings.endpoints:
         # Pop drops a key, the assignment allows the replacement of said dropped key
-        data[var] = data.pop(f'sensor-{var}')
+        data[var] = data.pop(f"sensor-{var}")
     return data
-
-def post(webhook, json):
-    # Default header
-    header = {"Content-Type": "application/json"}
-    requests.post(webhook, json, header)
-
-# Set up database connection
-def db_conn():
-    try:
-        global conn, cursor
-        conn = psycopg2.connect(user=settings.user,password=settings.password,host=settings.dbhost,port=settings.port,database=settings.db)
-        global cursor
-        cursor = conn.cursor()
-    except (Exception, psycopg2.Error) as error:
-        logger().error(f"Postgres connection failed: {error}")
 
 # Is it the weekend?
 def tariff():
