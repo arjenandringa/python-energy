@@ -1,16 +1,17 @@
 import stdlib
+from partition_table import partition_name
 
 # Python script to check and warn if current consumption is above 1KWh
 
 # Collect latest electricity usage
 def collect_power_consumed():
-    energy.db_conn()
+    stdlib.db_conn()
     # Select query: Power Consumed
-    pcq = f"SELECT value FROM {energy.partition_name()} WHERE SENSOR = 'power_consumed' ORDER BY CREATED_AT DESC LIMIT 1;"
-    energy.cursor.execute(pcq)
-    energy.conn.commit()
-    power_consumed = energy.cursor.fetchall()
-    energy.cursor.close()
+    pcq = f"SELECT value FROM {partition_name()} WHERE SENSOR = 'power_consumed' ORDER BY CREATED_AT DESC LIMIT 1;"
+    stdlib.cursor.execute(pcq)
+    stdlib.conn.commit()
+    power_consumed = stdlib.cursor.fetchall()
+    stdlib.cursor.close()
     return power_consumed[-1]
 
 # Send warning about consumption if current consumption 1KWh or higher.
