@@ -1,7 +1,10 @@
 import stdlib
+import settings
 from partition_table import partition_name
 
-# Python script to check and warn if current consumption is above 1KWh
+# Python script to check and warn if current consumption is above threshold
+
+threshold = 0.500
 
 # Collect latest electricity usage
 def collect_power_consumed():
@@ -14,11 +17,11 @@ def collect_power_consumed():
     stdlib.cursor.close()
     return power_consumed[-1]
 
-# Send warning about consumption if current consumption 1KWh or higher.
+# Send warning about consumption if current consumption exceeds threshold.
 def warn():
     data = collect_power_consumed()
     data = float(list(data)[-1])
-    if data > 0.500:
+    if data > threshold:
         http_data = {"content": f"Geregistreerd verbruik: {data} KWh"}
         stdlib.post(settings.warn_gas, json=http_data)
 

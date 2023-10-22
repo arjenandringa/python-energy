@@ -1,4 +1,5 @@
 import stdlib
+import settings
 
 # Collect last 15 minutes worth of gas usage
 def collect_gas_consumed():

@@ -1,8 +1,11 @@
 import logging
 import psycopg2
-from datetime import datetime, date, timedelta
 import requests
 import settings
+from apscheduler.schedulers.blocking import BlockingScheduler
+
+# Run the blocking scheduler to keep the app alive during runtime, otherwise Docker assumes it's done and the process ends
+scheduler = BlockingScheduler()
 
 # Logging function (logs to settings.logfile)
 def logger():

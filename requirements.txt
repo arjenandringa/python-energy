@@ -1,3 +1,4 @@
 requests==2.20.0
 psycopg2==2.7.5
 retrying==1.3.3
+adscheduler==3.10.4

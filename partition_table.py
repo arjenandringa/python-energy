@@ -1,5 +1,6 @@
 import stdlib
-
+import settings
+from datetime import datetime, date, timedelta
 # Execute partition_table daily at 00:00:01 to ensure a new table is created immediately at the start of the day.
 
 def partition_name():

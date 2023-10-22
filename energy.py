@@ -1,8 +1,8 @@
 import stdlib
+import settings
+import requests
+from datetime import datetime
 from partition_table import partition_name
-
-# Script lives as systemd unit with timer unit
-# /etc/systemd/system/energy.service and ./energy.timer
 
 # Gather data from each endpoint and make a dict (key,value)
 def energy_vars():
@@ -38,14 +38,14 @@ def process_energy_vars():
     dt = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     data = fix_data_keys()
     for val in data:
-        db_conn()
+        stdlib.db_conn()
         # Insert query
         iq = f"INSERT INTO {partition_name()} (CREATED_AT,SENSOR, VALUE) VALUES (%s,%s,%s);"
         # Insertables for %s
         i = (dt,val,data[val])
-        cursor.execute(iq,i)
-        conn.commit()
-    cursor.close()
+        stdlib.cursor.execute(iq,i)
+        stdlib.conn.commit()
+    stdlib.cursor.close()
 
 if __name__ == "__main__":
     process_energy_vars()
