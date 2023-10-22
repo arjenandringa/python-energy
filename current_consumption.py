@@ -8,13 +8,9 @@ threshold = 0.500
 
 # Collect latest electricity usage
 def collect_power_consumed():
-    stdlib.db_conn()
     # Select query: Power Consumed
     pcq = f"SELECT value FROM {partition_name()} WHERE SENSOR = 'power_consumed' ORDER BY CREATED_AT DESC LIMIT 1;"
-    stdlib.cursor.execute(pcq)
-    stdlib.conn.commit()
-    power_consumed = stdlib.cursor.fetchall()
-    stdlib.cursor.close()
+    power_consumed = stdlib.db_conn(pcq)
     return power_consumed[-1]
 
 # Send warning about consumption if current consumption exceeds threshold.

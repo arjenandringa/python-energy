@@ -38,14 +38,9 @@ def process_energy_vars():
     dt = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     data = fix_data_keys()
     for val in data:
-        stdlib.db_conn()
         # Insert query
-        iq = f"INSERT INTO {partition_name()} (CREATED_AT,SENSOR, VALUE) VALUES (%s,%s,%s);"
-        # Insertables for %s
-        i = (dt,val,data[val])
-        stdlib.cursor.execute(iq,i)
-        stdlib.conn.commit()
-    stdlib.cursor.close()
+        iq = f"INSERT INTO {partition_name()} (CREATED_AT,SENSOR,VALUE) VALUES ('%s','%s',%s);" % (dt,val,data[val])
+        stdlib.db_conn(iq)
 
 if __name__ == "__main__":
     process_energy_vars()

@@ -5,8 +5,8 @@
 ###################################################################################
 
 # Build & run
-docker build . --file Dockerfile --tag python-energy:$(date +%Y%m%d)
-docker run --rm -d -p 5434:5432 --name energyv1 python-energy:$(date +%Y%m%d)
+sudo docker build . --file Dockerfile --tag energy
+sudo docker run --rm -d -p 5432:5432 --name postgres energy && sleep 20
 
 # Run scheduler
 python3 scheduler.py
@@ -22,7 +22,7 @@ echo -n "Done, destroy env? (Y/N)"
 read DECISION
 if [ "$DECISION" = "Y" ]
 then
-docker stop energyv1
+sudo docker stop energyv1
 else
 echo "Stop the environment yourself anytime using docker stop energyv1, exiting"
 fi

@@ -23,11 +23,19 @@ def post(webhook, json):
     requests.post(webhook, json, header)
 
 # Default db connection
-def db_conn():
+def db_conn(query):
     try:
-        global conn, cursor
+        print(f"found this: {query}")
         conn = psycopg2.connect(user=settings.user,password=settings.password,host=settings.dbhost,port=settings.port,database=settings.db)
-        global cursor
         cursor = conn.cursor()
+        cursor.execute(query)
+        conn.commit()
+        if "SELECT" in query:
+            print("Found select statement")
+            returnable = cursor.fetchall()
+            print(returnable)
+            return returnable
+        else:
+            conn.close()
     except (Exception, psycopg2.Error) as error:
         logger().error(f"Postgres connection failed: {error}")

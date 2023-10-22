@@ -6,15 +6,14 @@ from datetime import datetime, date, timedelta
 def partition_name():
     return f"{settings.db}_" + date.today().strftime('%Y%m%d')
 
+def bogus():
+    print('bogus')
+
 # First collect the day's stats.
 def collect_stats():
-    stdlib.db_conn()
     try:
         statsq = f"SELECT MAX(VALUE)-MIN(VALUE),SENSOR FROM {settings.db} GROUP BY sensor;"
-        stdlib.cursor.execute(statsq)
-        stdlib.conn.commit()
-        daily_stats = stdlib.cursor.fetchall()
-        stdlib.cursor.close()
+        daily_stats = stdlib.db_conn(statsq)
     except (Exception, stdlib.psycopg2.Error) as error:
         stdlib.logger().error(f"Something went wrong: {error}")
     return dict([tuple(reversed(x)) for x in daily_stats])
@@ -28,11 +27,8 @@ def process_daily_stats():
 def drop_table():
     pd_partition_name = f"{settings.db}_" + (date.today() - timedelta(days=1)).strftime('%Y%m%d')
     try:
-        stdlib.db_conn()
         dropq = f"DROP TABLE {pd_partition_name}"
-        stdlib.cursor.execute(dropq)
-        stdlib.conn.commit()
-        stdlib.cursor.close()
+        stdlib.db_conn(dropq)
     except (Exception, stdlib.psycopg2.Error) as pg_error:
         stdlib.logger().error(f"Something went wrong, check the PGerror: {pg_error.pgerror}")
     else:
@@ -40,14 +36,11 @@ def drop_table():
 
 # Create a database partition. Should execute at midnight every day.
 def partition_table():
-    stdlib.db_conn()
     start = datetime.now().replace(hour=0,minute=0,second=0).strftime('%Y-%m-%d %H:%M:%S')
     end = datetime.now().replace(hour=23,minute=59,second=59).strftime('%Y-%m-%d %H:%M:%S')
     try:
         tableq = f"CREATE TABLE {partition_name()} PARTITION OF {settings.db} FOR VALUES FROM ('{start}') TO ('{end}');"
-        stdlib.cursor.execute(tableq)
-        stdlib.conn.commit()
-        stdlib.cursor.close()
+        stdlib.db_conn(tableq)
     except:
         stdlib.logger().error(f"Something went wrong while creating a new table, best check partition_name: {partition_name()}")
     else:
