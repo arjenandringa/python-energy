@@ -6,7 +6,7 @@ from datetime import datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 # Run the blocking scheduler to keep the app alive during runtime, otherwise Docker assumes it's done and the process ends
-scheduler = BlockingScheduler(timezone=Europe/Amsterdam)
+scheduler = BlockingScheduler(timezone='Europe/Amsterdam')
 
 # Logging function (logs to settings.logfile)
 def logger():
@@ -26,7 +26,8 @@ def post(webhook, json):
 # Postgres connection - Handles all DML & limited DDL
 def db_conn(query):
     try:
-        print(f"Found query: {query}")
+        # Debug line
+        #print(f"Found query: {query}")
         conn = psycopg2.connect(user=settings.user,password=settings.password,host=settings.dbhost,port=settings.port,database=settings.db)
         cursor = conn.cursor()
         cursor.execute(query)

@@ -21,7 +21,7 @@ def warn():
     data = float(list(data)[-1])
     print(data)
     if data > threshold:
-        http_data = {"content": f"Geregistreerd verbruik: {data} KWh"}
+        http_data = {"content": f"Geregistreerd actief verbruik: {data} KWh"}
         stdlib.post(settings.power_consumed, json=http_data)
 
 if __name__ == "__main__":

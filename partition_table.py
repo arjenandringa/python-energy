@@ -6,9 +6,6 @@ from datetime import datetime, date, timedelta
 def partition_name():
     return f"{settings.db}_" + date.today().strftime('%Y%m%d')
 
-def bogus():
-    print('bogus')
-
 # First collect the day's stats.
 def collect_stats():
     try:
