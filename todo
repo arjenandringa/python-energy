@@ -1,0 +1,3 @@
+Container, pack all files except Dockerfile
+Init script Postgres so the db is setup immediately upon start (partitioned table)
+Wipe energy.log, where does logging go now?
