@@ -6,7 +6,7 @@ from datetime import datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 # Run the blocking scheduler to keep the app alive during runtime, otherwise Docker assumes it's done and the process ends
-scheduler = BlockingScheduler(timezone='Europe/Amsterdam')
+scheduler = BlockingScheduler()
 
 # Logging function (logs to settings.logfile)
 def logger():
@@ -26,8 +26,7 @@ def post(webhook, json):
 # Postgres connection - Handles all DML & limited DDL
 def db_conn(query):
     try:
-        # Debug line
-        #print(f"Found query: {query}")
+        logger().info(f"Found query: {query}")
         conn = psycopg2.connect(user=settings.user,password=settings.password,host=settings.dbhost,port=settings.port,database=settings.db)
         cursor = conn.cursor()
         cursor.execute(query)
@@ -50,7 +49,7 @@ def tariff():
     current_hour = int(datetime.now().strftime('%H'))
     # Daarbij wordt van maandag tot en met vrijdag van 23.00 uur tot 7.00 uur, in het weekend (vrijdag 23.00 uur tot maandag 7.00 uur) en op officiële feestdagen een laag tarief berekend: https://www.oxxio.nl/over/nieuws/pieken-en-dalen
     if current_dotw in range(1,6) and current_hour in range(7,23):
-        tariff = 'energy_consumed_tariff_2'
+        tariff = 'total_power_import_t2_kwh'
     else:
-        tariff = 'energy_consumed_tariff_1'
+        tariff = 'total_power_import_t1_kwh'
     return tariff
