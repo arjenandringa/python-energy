@@ -53,3 +53,14 @@ def tariff():
     else:
         tariff = 'total_power_import_t1_kwh'
     return tariff
+
+def active_tariff():
+    tariff =  requests.get(settings.reader).json()['active_tariff']
+    if tariff == 1:
+        power_tariff = 't1'
+    else:
+        power_tariff = 't2'
+    return power_tariff
+
+if __name__ == "__main__":
+    active_tariff()

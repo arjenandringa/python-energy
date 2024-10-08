@@ -7,7 +7,7 @@ from partition_table import partition_name
 # Gather data from each endpoint and make a dict (key,value)
 def energy_vars():
     data = {}
-    information = requests.get(f"http://{settings.reader}/api/v1/data")
+    information = requests.get(settings.reader)
     for var in settings.endpoints:
         data[var] = information.json()[var]
     return data

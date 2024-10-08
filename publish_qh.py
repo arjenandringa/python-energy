@@ -37,8 +37,9 @@ def process_power():
 def publish():
     http_data = {"content": f"{process_power()} KWh verbruikt in 15 minuten"}
     stdlib.post(settings.warn_power, json=http_data)
-    http_data = {"content": f"{process_gas()} m3 verbruikt in 15 minuten"}
-    stdlib.post(settings.warn_gas, json=http_data)
+    if process_gas() > 0.0:
+        http_data = {"content": f"{process_gas()} m3 verbruikt in 15 minuten"}
+        stdlib.post(settings.warn_gas, json=http_data)
 
 if __name__ == "__main__":
     publish()
